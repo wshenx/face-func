@@ -1,14 +1,9 @@
-import cPickle
 import numpy as np
 import cv2
-import Image, ImageDraw
-import matplotlib.pyplot as plt
 import os
 import matplotlib.image as mpimg
 
 from scipy.ndimage.interpolation import zoom
-import caffe
-#import lmdb
 import h5py
 import random
 
@@ -30,7 +25,6 @@ def rndTranslationAug(orgbox):
     return trans_box
 
 def faceDection():
-    rect_width = 400
     face_box = [390, 110, 790, 510]#fixed for simplicity
     for video_idx in xrange(2, 5):
 
@@ -51,7 +45,6 @@ def faceDection():
                 roi = frame[trans_box[1]:trans_box[3], trans_box[0]:trans_box[2]]
                 cv2.imwrite( face_folder + str(cnt) + '_' + str(iter_idx) + '.jpg', roi)
 
-            #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 def FetchAllFiles(root_dir, suffix):
     file_names = []
@@ -69,6 +62,7 @@ def createDataset(video_idx):
     imgpath_list = FetchAllFiles(imgs_folder, '.jpg')
     label_interval = 6.0 / float(len(imgpath_list)) * 11
 
+    #add a video pictures for training
     #imgs_folder = '/home/weishen/dev/workspace/other/face-func/face/video'+str(2+video_idx)+'/'
     #imgpath_list.extend(FetchAllFiles(imgs_folder, '.jpg'))
 
@@ -78,23 +72,16 @@ def createDataset(video_idx):
     output_db_p_path = '/home/weishen/dev/workspace/other/face-func/facedb'+str(video_idx)+'_64_p.h5'
     for imgpath in imgpath_list:
         rawimg = mpimg.imread(imgpath)
-        #np.reshape(img, (img.shape[2], img.shape[0], img.shape[1]))
         img = []
         img.append(zoom(rawimg[:,:,0], 64.0/400.0))#
         img.append(zoom(rawimg[:,:,1], 64.0/400.0))
         img.append(zoom(rawimg[:,:,2], 64.0/400.0))
         img = np.asarray(img).astype(np.float)/255
-        #print img.shape
-        #imgplot = plt.imshow(img[0])
-        #plt.show()
         img_name = os.path.splitext(os.path.split(imgpath)[1])[0]
         img_idx = int(img_name.split('_')[0])
         label = img_idx*label_interval
         img_list.append(img)
         label_list.append(label)
-
-        #imgplot = plt.imshow(img[0])
-        #plt.show()
 
     f = h5py.File(output_db_path, 'w')
     f['data'] = img_list
@@ -109,7 +96,7 @@ def createDataset(video_idx):
     print 'Done'
 
 def testDB():
-    dbpath = '/home/weishen/dev/workspace/other/face-func/face/facedb.h5'
+    dbpath = '/home/weishen/dev/workspace/other/face-func/facedb3_64.h5'
     f = h5py.File(dbpath, 'r')
     img_list = f['data']
     label_list = f['label']
@@ -136,12 +123,12 @@ def testModel():
     dif_list = []
     for img_idx in xrange(0, out.shape[0]):
         dif_list.append(abs(out[img_idx][0] - label_list[img_idx]))
-        #print str(out[img_idx]) + ' vs ' + str(label_list[img_idx])
     print np.histogram(dif_list, bins=np.arange(0, 6, 0.1))
     print 'Done'
 
 if __name__ == '__main__':
     #faceDection()
-    #createDataset(3)
+    #createDataset(2) #create dataset for training
+    #createDataset(3) #create dataset for test
     #testDB()
     testModel()
