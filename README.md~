@@ -8,27 +8,27 @@ Methods: A siamese network is used for the angle estimation. Rather than a singl
 Results: Preliminary experiments showed that regression model achieved higher estimation accuracy than contrastive loss involved model. Estimation accuracy histograms are shown below. The bins are bins=np.arange(0, 6, 0.1)
 
 siamese-regression comb:
-[1386, 1077,  584,  332,  294,  207,   80,   69,   27,    7,    4,
+array([1386, 1077,  584,  332,  294,  207,   80,   69,   27,    7,    4,
           2,    1,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-          0,    0,    0,    0]
+          0,    0,    0,    0])
 
-regression only:
-[1378, 1086,  618,  422,  280,  162,   73,   33,   12,    2,    1,
+regression only
+array([1378, 1086,  618,  422,  280,  162,   73,   33,   12,    2,    1,
           2,    0,    1,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-          0,    0,    0,    0]
+          0,    0,    0,    0])
 
-siamese only:
-[141, 103, 131,  77,  76,  68,  58,  75,  73,  65,  66,  68,  62,
+Siamese only
+array([141, 103, 131,  77,  76,  68,  58,  75,  73,  65,  66,  68,  62,
         69,  83,  61,  65,  72,  68,  59,  77,  74,  59,  66,  62,  65,
         64,  65,  55,  69,  63,  58,  57,  64,  74,  52,  67,  64,  65,
         62,  55,  72,  66,  60,  65,  59,  76,  69,  68,  67,  64,  70,
-        75,  62,  68,  63,  78,  51,  35]
+        75,  62,  68,  63,  78,  51,  35])
 
 This is only a simple demonstration of face rotate angle estimation. Further investigation is definetely needed. 
 
